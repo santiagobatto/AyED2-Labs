@@ -1,0 +1,12 @@
+# macOS
+.DS_Store
+**/.DS_Store
+
+# C / compilación
+*.o
+*.out
+*.exe
+
+# Archivos temporales
+*.log
+
