@@ -13,43 +13,82 @@ struct bound_data {
 
 struct bound_data check_bound(int value, int arr[], unsigned int length) {
     struct bound_data res;
+    
+    //iniciacion logica -> debo buscar un contraejemplo para mis banderas
+    res.is_upperbound = true;
+    res.is_lowerbound = true;
+    res.exists = false;
+    res.where = 0;
 
-    /*
-        Mi funcion debe:
-            chequear si value es mayor o igual a todos los elementos de arr -> bool
-            // si es menor o igual a todos los elementos de arr -> bool
-            si value se encuentra en el array -> bool
-                si se encuentra, en que pos del array
+    for (unsigned int i = 0; i < length; i++) {
 
-        Para esto necesito, recorrer el array de inicio al final evaluando en cada iteracion:
-            guardar en una var temporal el max y min elemento
-            evaluar cada iteracion si el elem en la pos [] es el mismo que value
-    */
+        if (value == arr[i]) {
+            res.exists = true;
+            res.where = i;
+        }
 
-    //Recorro el array
-    for (int i = 0; i++; i < length) {
+        //value es cota superior? si es menor a algun elemento, ya no lo es. Si es mayor o igual, sigue siendo
+        if (value < arr[i]) {
+            res.is_upperbound = false;
+        }
 
-        
-        
+        //value es cota inferior? si es mayor a algun elemento, ya no lo es. Si es menor o igual, sigue siendo
+        if (value > arr[i]) {
+            res.is_lowerbound = false;
+        }   
     }
-
     return res;
 }
 
 int main(void) {
-    int a[ARRAY_SIZE] = {0, -1, 9, 4};
-    int value=9;
-    //
-    // TODO: COMPLETAR - Pedir entrada al usuario
-    //
-    struct bound_data result = check_bound(value, a, ARRAY_SIZE);
+    unsigned int length;
+    
+    printf("Cuantos elementos vas a ingresar? El tamanio maximo definido del arreglo es: %u \n", (unsigned int)ARRAY_SIZE);
 
-    // TODO: REEMPLAZAR LO SIGUIENTE LUEGO POR LA SALIDA QUE PIDE EL ENUNCIADO
-    printf("%d", result.is_upperbound); // Imprime 1
-    printf("%d", result.is_lowerbound); // Imprime 0
-    printf("%u", result.exists);        // Imprime 1
-    printf("%u", result.where);         // Imprime 2
+    if (scanf("%u", &length) != 1 || length == 0) { //scanf devuelve 1 si se leyo un valor con exito 
+        printf("Error: Tamanio del arreglo invalido!\n");
+        return 1;
+    }
 
+    int a[length];
+    for (unsigned int i = 0; i < length; i++) {
+        printf("Ingrese el valor del arreglo en la posicion [%u:]\n", i);
+        scanf("%d", &a[i]);
+    }
+
+    int value;
+    printf("Ingrese el valor a verificar: \n");
+    scanf("%d", &value);
+
+    struct bound_data result = check_bound(value, a, length);
+
+    //Salida
+    printf("--------Resultados--------\n");
+
+    bool none = true;
+    if (result.is_upperbound) {
+        printf("El valor ingresado %d es cota superior de todos los elementos del arreglo!\n", value);
+        none = false;
+    }
+
+    if (result.is_lowerbound) {
+        printf("El valor ingresado %d es cota inferior de todos los elementos del arreglo!\n", value);
+        none = false;        
+    }
+    //Si existe en el arreglo && es minimo o maximo, mostrar la pos donde se encuentra
+    if (result.exists){
+        if (result.is_upperbound) {
+            printf("El valor ingresado %d existe en el arreglo, es maximo y se encuentra en la posicion [%u]", value, result.where);
+            none = false;
+        }
+        if (result.is_lowerbound) {
+            printf("El valor ingresado %d existe en el arreglo, es minimo y se encuentra en la posicion [%u]", value, result.where);
+            none = false;
+        }
+    }
+
+    if (none == true) {
+        printf("\nTu valor ingresado no es cota ni max/min :(");
+    }
     return EXIT_SUCCESS;
 }
-
