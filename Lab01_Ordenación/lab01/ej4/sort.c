@@ -26,22 +26,69 @@ void selection_sort(int a[], unsigned int length) {
 
 
 static void insert(int a[], unsigned int i) {
-    /* copiá acá la implementación que hiciste en el ejercicio 1 */
+   unsigned int j = i;
+
+    while (j > 0 && goes_before(a[j], a[j-1])) {
+
+        //Parte B: muestro que voy a mover
+        printf("Swap: Muevo el valor %d a la posicion %u\n", a[j], j-1);
+        
+        swap(a, j-1, j);
+        j--;
+    }
 }
 
 void insertion_sort(int a[], unsigned int length) {
-    /* copiá acá la implementación que hiciste en el ejercicio 1 */
+ printf("Arreglo original:\n");
+    array_dump(a,length);
+
+    for (unsigned int i = 1; i < length; ++i) {
+        assert(array_is_sorted(a, i));
+         //Parte C: verificacion de cumplimiento de la invariante: el segmento a[0, i) esta ordenado
+        insert(a, i, length);
+        printf("Fin de iteracion %u\n", i);
+        printf("------------------\n");
+    }   
 }
 
 
 static unsigned int partition(int a[], unsigned int izq, unsigned int der) {
-    /* copiá acá la implementación que hiciste en el ejercicio 3 */
+  unsigned int i, j;
+    unsigned int ppiv = 0;
+
+    i = izq + 1;
+    j = der;
+
+    while (i <= j) {
+        if (goes_before(a[i], a[ppiv])) i = i + 1;
+        if (goes_before(a[ppiv], a[j])) j = j - 1;
+        if (a[i] > a[ppiv] && a[j] < a[ppiv]) {
+            swap(a, i, j);
+            i += 1;
+            j -= 1;
+        }
+    }
+    swap(a, ppiv, j);
+    ppiv = j;
+
+    return ppiv;
 }
 
 static void quick_sort_rec(int a[], unsigned int izq, unsigned int der) {
-    /* copiá acá la implementación que hiciste en el ejercicio 2 */
+     unsigned int ppiv = 0;
+
+    if (der > izq) {
+        ppiv = partition(a, izq, der);
+
+        if (ppiv > izq) {
+            quick_sort_rec (a, izq, ppiv - 1); //Segmentation fault porque si ppiv = 0 y ppiv = -1 es out of bounds
+        
+        } else quick_sort_rec (a, ppiv + 1, der);
+
+        quick_sort_rec(a,ppiv + 1, der);
+    }
 }
 
 void quick_sort(int a[], unsigned int length) {
-    /* copiá acá la implementación que hiciste en el ejercicio 1 */
+    quick_sort_rec(a, 0, (length == 0) ? 0 : length - 1);
 }
