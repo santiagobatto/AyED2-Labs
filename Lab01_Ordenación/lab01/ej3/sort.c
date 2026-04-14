@@ -19,38 +19,42 @@ static unsigned int partition(int a[], unsigned int izq, unsigned int der) {
     */
 
     unsigned int i, j;
-    unsigned int ppiv = 0;
+    unsigned int ppiv = izq; //La primera posicion del segmento a ordenar
 
     i = izq + 1;
     j = der;
 
     while (i <= j) {
-        if (goes_before(a[i], a[ppiv])) i = i + 1;
-        if (goes_before(a[ppiv], a[j])) j = j - 1;
-        if (a[i] > a[ppiv] && a[j] < a[ppiv]) {
+        
+        if (goes_before(a[i], a[ppiv])) { //Si es menor va a la izq del pivot y sigue avanzando
+            i = i + 1;
+        } else if (goes_before(a[ppiv], a[j])) { //Si es mayor va a la der del pivot y retrocede buscando otro
+            j = j - 1;
+        } else { // a[i] es mayor y a[j] es menor
             swap(a, i, j);
             i += 1;
             j -= 1;
         }
     }
-    swap(a, ppiv, j);
+    swap(a, izq, j);
     ppiv = j;
 
     return ppiv;
 }
 
 static void quick_sort_rec(int a[], unsigned int izq, unsigned int der) {
-    unsigned int ppiv = 0;
+    unsigned int ppiv;
 
     if (der > izq) {
         ppiv = partition(a, izq, der);
 
         if (ppiv > izq) {
-            quick_sort_rec (a, izq, ppiv - 1); //Segmentation fault porque si ppiv = 0 y ppiv = -1 es out of bounds
-        
-        } else quick_sort_rec (a, ppiv + 1, der);
+            quick_sort_rec (a, izq, ppiv - 1);
+        }
 
-        quick_sort_rec(a,ppiv + 1, der);
+        if (ppiv < der) {
+            quick_sort_rec (a, ppiv + 1, der);
+        }    
     }
 }
 

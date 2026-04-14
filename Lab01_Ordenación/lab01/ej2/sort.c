@@ -8,17 +8,18 @@
 
 
 static void quick_sort_rec(int a[], unsigned int izq, unsigned int der) {
-    unsigned int ppiv = 0;
+    unsigned int ppiv;
 
     if (der > izq) {
         ppiv = partition(a, izq, der);
 
-        if (ppiv > izq) {
-            quick_sort_rec (a, izq, ppiv - 1); //Segmentation fault porque si ppiv = 0 y ppiv = -1 es out of bounds
-        
-        } else quick_sort_rec (a, ppiv + 1, der);
+        if (ppiv > izq) { //Ordeno la parte izquierda solo si existe - Uso check ppiv > 0 para que no haya underflow en ppiv - 1
+            quick_sort_rec (a, izq, ppiv - 1);
+        }
 
-        quick_sort_rec(a,ppiv + 1, der);
+        if (ppiv < der) { //Ordeno la parte derecha
+            quick_sort_rec(a,ppiv + 1, der);
+        }
     }
 }
 

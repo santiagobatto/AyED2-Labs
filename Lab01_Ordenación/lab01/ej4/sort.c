@@ -7,10 +7,13 @@
 #include "sort_helpers.h"
 #include "sort.h"
 
+///////////////////////SELECTION SORT/////////////////////////////////////
+
 static unsigned int min_pos_from(int a[], unsigned int i, unsigned int length) {
     unsigned int min_pos = i;
-    for (unsigned int j = i + 1; j < length; ++j) {
-        if (!goes_before(a[min_pos],a[j])) {
+
+    for (unsigned int j = i + 1; j < length; ++j) {    
+        if (goes_before(a[j],a[min_pos])) { //Si en j va antes que nuestro minimo actual
             min_pos = j;
         }
     }
@@ -23,69 +26,64 @@ void selection_sort(int a[], unsigned int length) {
         swap(a, i, min_pos);
     }
 }
-
+///////////////////////////INSERTION SORT///////////////////////////////////////////////////////
 
 static void insert(int a[], unsigned int i) {
    unsigned int j = i;
 
     while (j > 0 && goes_before(a[j], a[j-1])) {
-
-        //Parte B: muestro que voy a mover
-        printf("Swap: Muevo el valor %d a la posicion %u\n", a[j], j-1);
-        
         swap(a, j-1, j);
         j--;
     }
 }
 
 void insertion_sort(int a[], unsigned int length) {
- printf("Arreglo original:\n");
-    array_dump(a,length);
-
     for (unsigned int i = 1; i < length; ++i) {
         assert(array_is_sorted(a, i));
          //Parte C: verificacion de cumplimiento de la invariante: el segmento a[0, i) esta ordenado
-        insert(a, i, length);
-        printf("Fin de iteracion %u\n", i);
-        printf("------------------\n");
-    }   
+        insert(a, i);
+    }
 }
 
+//////////////////////////////QUICK SORT////////////////////////////////////////
 
 static unsigned int partition(int a[], unsigned int izq, unsigned int der) {
-  unsigned int i, j;
-    unsigned int ppiv = 0;
+    unsigned int i, j;
+    unsigned int ppiv = izq; //La primera posicion del segmento a ordenar
 
     i = izq + 1;
     j = der;
 
     while (i <= j) {
-        if (goes_before(a[i], a[ppiv])) i = i + 1;
-        if (goes_before(a[ppiv], a[j])) j = j - 1;
-        if (a[i] > a[ppiv] && a[j] < a[ppiv]) {
+        
+        if (goes_before(a[i], a[ppiv])) { //Si es menor va a la izq del pivot y sigue avanzando
+            i = i + 1;
+        } else if (goes_before(a[ppiv], a[j])) { //Si es mayor va a la der del pivot y retrocede buscando otro
+            j = j - 1;
+        } else { // a[i] es mayor y a[j] es menor
             swap(a, i, j);
             i += 1;
             j -= 1;
         }
     }
-    swap(a, ppiv, j);
+    swap(a, izq, j);
     ppiv = j;
 
     return ppiv;
 }
 
 static void quick_sort_rec(int a[], unsigned int izq, unsigned int der) {
-     unsigned int ppiv = 0;
+     unsigned int ppiv;
 
     if (der > izq) {
         ppiv = partition(a, izq, der);
 
         if (ppiv > izq) {
-            quick_sort_rec (a, izq, ppiv - 1); //Segmentation fault porque si ppiv = 0 y ppiv = -1 es out of bounds
-        
-        } else quick_sort_rec (a, ppiv + 1, der);
-
-        quick_sort_rec(a,ppiv + 1, der);
+            quick_sort_rec (a, izq, ppiv - 1);
+        }
+        if (der > ppiv) {
+            quick_sort_rec (a, ppiv + 1, der);
+        }
     }
 }
 
