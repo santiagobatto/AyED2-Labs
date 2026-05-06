@@ -34,6 +34,18 @@ int main(void) {
        - Se pueden declarar hasta 2 punteros.
        AYUDA: podes usar GDB para consultares valores de variables y la dirección de memoria donde estan alojadas.
     */
+    
+    int *p1 = NULL;
+    p1 = &x; //p apunta a la dir de memoria donde esta alojado el entero de la variable x
+    *p1 = 9;
+    
+    person_t *p2 = NULL;
+    p2 = &m;
+    p2->age = 100;
+    p2->name_initial = 'F';
+    
+    p1 = &a[1];
+    *p1 = 42;
 
     printf("x = %d\n", x);
     printf("m = (%d, %c)\n", m.age, m.name_initial);
