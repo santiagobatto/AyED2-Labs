@@ -1,0 +1,25 @@
+// Completar aquí
+#include <stdlib.h>
+#include <stdio.h>
+#include <assert.h>
+
+void swap (int *a, int *b) {
+  int aux = 0;
+  aux = *a;
+  *a = *b;
+  *b = aux;
+}
+
+int main(void){
+ 
+  int x,y;
+  x = 6;
+  y = 4;
+  
+  printf("Pre swap: x=%d y=%d\n", x, y);
+  swap(&x, &y);
+  printf("Post swap: x=%d y=%d\n",x, y);
+  return(EXIT_SUCCESS);
+}
+
+
