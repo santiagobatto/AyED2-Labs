@@ -6,71 +6,78 @@
 #include "counter.h"
 
 void print_help(char *program_name) {
-    /* Print the usage help of this program. */
-    printf("Usage: %s <input file path>\n\n"
-           "Check if in a given file there is a perfect match between all opening and closing parentheses.\n"
-           "\n",
-           program_name);
+  /* Print the usage help of this program. */
+  printf("Usage: %s <input file path>\n\n"
+         "Check if in a given file there is a perfect match between all "
+         "opening and closing parentheses.\n"
+         "\n",
+         program_name);
 }
 
-FILE * open_input_file(const char *filepath) {
-    FILE *file = NULL;
-    file = fopen(filepath, "r");
-    if (file == NULL) {
-        fprintf(stderr, "File does not exist.\n");
-        exit(EXIT_FAILURE);
-    }
-    return (file);
+FILE *open_input_file(const char *filepath) {
+  FILE *file = NULL;
+  file = fopen(filepath, "r");
+  if (file == NULL) {
+    fprintf(stderr, "File does not exist.\n");
+    exit(EXIT_FAILURE);
+  }
+  return (file);
 }
 
 char *parse_filepath(int argc, char *argv[]) {
-    /* Parse the filepath given by command line argument. */
-    char *result = NULL;
+  /* Parse the filepath given by command line argument. */
+  char *result = NULL;
 
-    if (argc < 2) {
-        print_help(argv[0]);
-        exit(EXIT_FAILURE);
-    }
+  if (argc < 2) {
+    print_help(argv[0]);
+    exit(EXIT_FAILURE);
+  }
 
-    result = argv[1];
+  result = argv[1];
 
-    return (result);
+  return (result);
 }
 
-bool matching_parentheses(FILE * file) {
-    counter c = NULL;
-    bool balanced = true;
-    char letter;
+bool matching_parentheses(FILE *file) {
 
-    while (!feof(file) && balanced) {
-        letter = fgetc(file);
-        if (letter == '(') {
-            counter_inc(c);
-        } else if (counter_is_init(c)) {
-            balanced = (letter != ')');
-        } else if (letter == ')') {
-            counter_dec(c);
-        }
+  counter c = counter_init(); // 1er cambio
+  bool res; // para guardar la validacion final, despues destruir el contador y
+            // retornar la res
+
+  bool balanced = true;
+  char letter;
+
+  while (!feof(file) && balanced) {
+    letter = fgetc(file);
+    if (letter == '(') {
+      counter_inc(c);
+    } else if (counter_is_init(c)) {
+      balanced = (letter != ')');
+    } else if (letter == ')') {
+      counter_dec(c);
     }
-    return (balanced && counter_is_init(c));
+  }
+  res = (balanced && counter_is_init(c));
+  counter_destroy(c);
+  return res;
 }
 
 int main(int argc, char *argv[]) {
-    char *filepath = NULL;
-    FILE *file = NULL;
+  char *filepath = NULL;
+  FILE *file = NULL;
 
-    /* parse the filepath given in command line arguments */
-    filepath = parse_filepath(argc, argv);
+  /* parse the filepath given in command line arguments */
+  filepath = parse_filepath(argc, argv);
 
-    /* open the input file */
-    file = open_input_file(filepath);
+  /* open the input file */
+  file = open_input_file(filepath);
 
-    /* call the function for the matching parentheses check */
-    if (matching_parentheses(file)) {
-        printf("Parentheses match.\n");
-    } else {
-        printf("Parentheses mismatch.\n");
-    }
+  /* call the function for the matching parentheses check */
+  if (matching_parentheses(file)) {
+    printf("Parentheses match.\n");
+  } else {
+    printf("Parentheses mismatch.\n");
+  }
 
-    return (EXIT_SUCCESS);
+  return (EXIT_SUCCESS);
 }

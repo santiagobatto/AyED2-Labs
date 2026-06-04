@@ -1,21 +1,21 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <stdbool.h>
 #include "robot.h"
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 struct _robot {
-    struct _codo * codo;
+  struct _codo *codo;
 };
 
 struct _codo {
-    struct _mano * mano;
-    int aceite;
-    bool quemado;
+  struct _mano *mano;
+  int aceite;
+  bool quemado;
 };
 
 struct _mano {
-    int aceite;
-    bool quemado;
+  int aceite;
+  bool quemado;
 };
 
 /**
@@ -23,19 +23,19 @@ struct _mano {
  *
  */
 robot_t robot_nuevo() {
-    robot_t robot;
+  robot_t robot;
 
-    robot = malloc(sizeof(struct _robot));
+  robot = malloc(sizeof(struct _robot));
 
-    robot->codo = malloc(sizeof(struct _codo));
-    robot->codo->aceite = ACEITE_OPTIMO;
-    robot->codo->quemado = false;
+  robot->codo = malloc(sizeof(struct _codo));
+  robot->codo->aceite = ACEITE_OPTIMO;
+  robot->codo->quemado = false;
 
-    robot->codo->mano = malloc(sizeof(struct _mano));
-    robot->codo->mano->aceite = ACEITE_OPTIMO;
-    robot->codo->mano->quemado = false;
+  robot->codo->mano = malloc(sizeof(struct _mano));
+  robot->codo->mano->aceite = ACEITE_OPTIMO;
+  robot->codo->mano->quemado = false;
 
-    return robot;
+  return robot;
 }
 
 /**
@@ -43,25 +43,24 @@ robot_t robot_nuevo() {
  * partes quemadas
  *
  */
-void usar_robot(robot_t robot,
-                 int aceite_codo, bool quemado_codo,
-                 int aceite_mano, bool quemado_mano) {
-    robot->codo->aceite = aceite_codo;
-    robot->codo->quemado = quemado_codo;
-    robot->codo->mano->aceite = aceite_mano;
-    robot->codo->mano->quemado = quemado_mano;
+void usar_robot(robot_t robot, int aceite_codo, bool quemado_codo,
+                int aceite_mano, bool quemado_mano) {
+  robot->codo->aceite = aceite_codo;
+  robot->codo->quemado = quemado_codo;
+  robot->codo->mano->aceite = aceite_mano;
+  robot->codo->mano->quemado = quemado_mano;
 }
 
-/** 
+/**
  * @brief Verifica si el robot tiene el aceite óptimo y ninguna parte quemada.
  *
  */
 bool verificar_robot(robot_t robot) {
-    bool b1 = robot->codo->aceite == ACEITE_OPTIMO;
-    bool b2 = robot->codo->quemado == false;
-    bool b3 = robot->codo->mano->aceite == ACEITE_OPTIMO;
-    bool b4 = robot->codo->mano->quemado == false;
-    return (b1 && b2 && b3 && b4);
+  bool b1 = robot->codo->aceite == ACEITE_OPTIMO;
+  bool b2 = robot->codo->quemado == false;
+  bool b3 = robot->codo->mano->aceite == ACEITE_OPTIMO;
+  bool b4 = robot->codo->mano->quemado == false;
+  return (b1 && b2 && b3 && b4);
 }
 
 /**
@@ -69,11 +68,13 @@ bool verificar_robot(robot_t robot) {
  *
  */
 void mostrar_robot(robot_t robot) {
-    printf("    codo              mano\n");
-    printf("   aceite            aceite\n");
-    printf("     %i                %i\n", robot->codo->aceite, robot->codo->mano->aceite);
-    printf("  quemado?          quemado?\n");
-    printf("     %i                %i\n", robot->codo->quemado, robot->codo->mano->quemado);
+  printf("    codo              mano\n");
+  printf("   aceite            aceite\n");
+  printf("     %i                %i\n", robot->codo->aceite,
+         robot->codo->mano->aceite);
+  printf("  quemado?          quemado?\n");
+  printf("     %i                %i\n", robot->codo->quemado,
+         robot->codo->mano->quemado);
 }
 
 /**
@@ -85,11 +86,32 @@ void mostrar_robot(robot_t robot) {
  * A las partes no quemadas NO LAS REEMPLAZA, sólo les pone el aceite óptimo
  */
 void reparar_robot(robot_t robot) {
+  // COMPLETAR!!
+  if (robot->codo->mano->quemado) { // Si la mano esta quemada
 
-    //
-    // COMPLETAR!!
-    //
+    free(robot->codo->mano); // Libero memoria
+    robot->codo->mano =
+        malloc(sizeof(struct _mano)); // Reemplazo por parte nueva
+    robot->codo->mano->aceite = ACEITE_OPTIMO;
+    robot->codo->mano->quemado = false;
 
+  } else
+    robot->codo->mano->aceite = ACEITE_OPTIMO;
+
+  if (robot->codo->quemado) {
+    struct _mano *aux; // Creo un puntero auxiliar para guardar la MISMA mano
+    aux = robot->codo->mano;
+
+    free(robot->codo); // Libero espacio
+
+    robot->codo =
+        malloc(sizeof(struct _codo)); // Reservo memoria para el codo nuevo
+    robot->codo->aceite = ACEITE_OPTIMO;
+    robot->codo->mano = aux;
+    robot->codo->quemado = false;
+
+  } else
+    robot->codo->aceite = ACEITE_OPTIMO;
 }
 
 /**
@@ -97,7 +119,7 @@ void reparar_robot(robot_t robot) {
  *
  */
 void destruir_robot(robot_t robot) {
-    free(robot->codo->mano);
-    free(robot->codo);
-    free(robot);
+  free(robot->codo->mano);
+  free(robot->codo);
+  free(robot);
 }

@@ -1,7 +1,9 @@
 #ifndef _PAIR_H
 #define _PAIR_H
 
-typedef struct s_pair_t * pair_t;
+typedef struct s_pair_t *pair_t;
+/*Implementacion opaca: todos los archivos que incluyan a pair.c solo sabran que
+ * hay un puntero a un par, pero no que hay dentro*/
 
 pair_t pair_new(int x, int y);
 /*
@@ -33,6 +35,4 @@ void pair_destroy(pair_t p);
  *
  */
 
-
 #endif
-

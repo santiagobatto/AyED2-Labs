@@ -96,6 +96,7 @@ void reparar_moto(moto_t moto) {
     moto->rueda_delantera =
         malloc(sizeof(struct _rueda)); // creo una nueva alojando memoria
     moto->rueda_delantera->presion = PRESION_OPTIMA;
+    moto->rueda_delantera->pinchada = false;
 
   } else
     moto->rueda_delantera->presion = PRESION_OPTIMA;
@@ -106,6 +107,7 @@ void reparar_moto(moto_t moto) {
     free(moto->rueda_trasera);
     moto->rueda_trasera = malloc(sizeof(struct _rueda));
     moto->rueda_trasera->presion = PRESION_OPTIMA;
+    moto->rueda_trasera->pinchada = false;
 
   } else
     moto->rueda_trasera->presion = PRESION_OPTIMA;
