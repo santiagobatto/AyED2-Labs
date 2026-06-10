@@ -2,12 +2,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct Node {
+typedef struct Node { //Estructura para apuntar al sig eslabon en la cadena
   int data;
   struct Node *next;
 } Node;
 
-typedef Node *List;
+typedef Node *List; //El TDA, un puntero de entrada, crea un alias List que es un puntero a un nodo
 
 /**
  * @brief Construye y devuelve una lista de ejemplo de 3 elementos
@@ -15,8 +15,8 @@ typedef Node *List;
 List setup_example() {
   // Completar del ejercicio anterior
   int i = 3;
-  List my_list = malloc(sizeof(Node));
-  Node *a_node;
+  List my_list = malloc(sizeof(Node)); //List es un puntero, y my_list almacena la dir de memoria del inicio
+  Node *a_node; //Un puntero auxiliar para apuntar a nodos particulares
 
   a_node = my_list;
   i--;
