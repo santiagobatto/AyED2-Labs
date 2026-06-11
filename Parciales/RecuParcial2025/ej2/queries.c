@@ -15,8 +15,20 @@
  */
 void max_daily_rainfall(WeatherTable a, int year, int output[MONTHS]) {
 
-    //
-    // COMPLETAR!!
-    //
+//el anio viene como 2003 por ej, debo convertirlo a indice de la matriz
+unsigned int actual_year = year - 1980u;
+  
+  for (month_t month = january; month <= december; month++) {
+    unsigned int cont_max_rainfall = 0u;
+    for (unsigned int day = 0; day < DAYS; day++) {
+    
+      if (a[actual_year][month][day]._rainfall > cont_max_rainfall) {
+        cont_max_rainfall = a[actual_year][month][day]._rainfall;
+      }
+    }
+    output[month] = cont_max_rainfall;
+  }
 
 }
+
+

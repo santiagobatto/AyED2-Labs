@@ -42,6 +42,16 @@ int main() {
         { 5, {42, 8, 11, 99, -10}, {-10, 8, 11, 99, 42} },
         { 5, {11, 42, -10, 99, 8}, {-10, 42, 8, 99, 11} },
         { 5, {8, 42, 11, -10, 99}, {8, 42, 11, -10, 99} },
+        //Tests mios - caso pos pares ordenado
+         {5, {1, 123, 3, 325, 5}, {1, 123, 3, 325, 5}}, //caso pos pares ordenado
+
+        {5, {5, 234, 4, 54, -32}, {-32, 234, 4, 54, 5}}, //caso pos pares ordenado al reves
+
+        {5, {42, 43, 42, -23, -1}, {-1, 43, 42, -23, 42}}, //elementos duplicados en pos pares
+
+        {5, {-5, 234, -323, 54, 0}, {-323, 234, 0, 54, -5}}, //numeros negativos
+
+        {5, {15, -999, 5, 999, 1}, {1, -999, 5, 999, 15}} //Pos impares ruidosas
     };
 
     printf("TESTING intercalated_sort\n");
