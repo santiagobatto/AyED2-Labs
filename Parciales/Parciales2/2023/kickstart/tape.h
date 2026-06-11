@@ -9,7 +9,7 @@ typedef char tape_elem;
 
 tape_t tape_create(void);
 /* 
- * Crea una cinta vacia
+ * Creates a new instance of tape
  *
  * PRE: {true}
  *   tape = tape_create()
@@ -19,7 +19,7 @@ tape_t tape_create(void);
 
 tape_t tape_rewind(tape_t tape);
 /*
- * Posiciona el cursor de la cinta <tape> en el primer elemento 
+ * Set the cursor on the first element of the tape
  *
  * PRE: {tape --> tape}
  *  tape = tape_rewind(tape);
@@ -30,13 +30,13 @@ tape_t tape_rewind(tape_t tape);
 bool tape_at_start(tape_t tape);
 /*
  *
- * Indica si el cursor esta al principio de la la cinta
+ * Indicates if the cursor of tape <tape> it's pointing to the first element
  *
  */
 
 bool tape_at_stop(tape_t tape);
 /* 
- * Indica si el cursor está apuntando fuera de la cinta 
+ * Indicates if the cursor of tape <tape> falls out the last element
  *
 */
 
@@ -128,4 +128,3 @@ tape_t tape_destroy(tape_t tape);
 
 
 #endif
-
